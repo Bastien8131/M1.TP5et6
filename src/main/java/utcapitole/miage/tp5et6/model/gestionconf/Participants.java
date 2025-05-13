@@ -138,6 +138,22 @@ public class Participants {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    public static final String CREATE_TABLE_SQL =
+        "CREATE TABLE IF NOT EXISTS PARTICIPANTS (" +
+        "codParticipant INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "nomPart TEXT NOT NULL, " +
+        "prenomPart TEXT, " +
+        "organismePart TEXT, " +
+        "cpPart INTEGER, " +
+        "adrPart TEXT, " +
+        "villePart TEXT, " +
+        "paysPart TEXT, " +
+        "emailPart TEXT, " +
+        "dtInscription TEXT, " +
+        "statut TEXT, " +
+        "password TEXT" +
+        ")";
 }
 
 

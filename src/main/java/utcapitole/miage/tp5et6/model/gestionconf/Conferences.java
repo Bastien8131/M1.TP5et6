@@ -104,4 +104,16 @@ public class Conferences {
         System.out.println(Arrays.toString(strArr));
         return Arrays.asList(strArr);
     }
+
+    public static final String CREATE_TABLE_SQL =
+        "CREATE TABLE IF NOT EXISTS CONFERENCES (" +
+        "CodCongres INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "titreCongres TEXT NOT NULL, " +
+        "numEditionCongres INTEGER, " +
+        "dtDebutCongres TEXT, " +
+        "dtFinCongres TEXT, " +
+        "urlSiteWebCongres TEXT, " +
+        "thematiques TEXT, " +
+        "activites TEXT" +
+        ")";
 }
