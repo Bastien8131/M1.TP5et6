@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>Liste des Conférences</h1>
+
+<div th:if="${conferences == null || conferences.isEmpty()}">
+  <p>Aucune conférence n'a été enregistrée.</p>
+</div>
+
+<table th:if="${conferences != null && !conferences.isEmpty()}">
+  <thead>
+  <tr>
+    <th>Titre</th>
+    <th>Édition</th>
+    <th>Date de début</th>
+    <th>Date de fin</th>
+    <th>Site Web</th>
+    <th>Activités</th>
+    <th>Thématiques</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="conference : ${conferences}">
+    <td th:text="${conference.titreCongres}"></td>
+    <td th:text="${conference.numEditionCongres}"></td>
+    <td th:text="${conference.dtDebutCongres}"></td>
+    <td th:text="${conference.dtFinCongres}"></td>
+    <td>
+      <a th:if="${conference.urlSiteWebCongres}" th:href="${conference.urlSiteWebCongres}" target="_blank" th:text="${conference.urlSiteWebCongres}"></a>
+      <span th:unless="${conference.urlSiteWebCongres}">-</span>
+    </td>
+    <td>
+      <ul th:if="${conference.activites != null && !conference.activites.isEmpty()}">
+        <li th:each="activite : ${conference.activites}" th:text="${activite}"></li>
+      </ul>
+      <span th:if="${conference.activites == null || conference.activites.isEmpty()}">-</span>
+    </td>
+    <td>
+      <ul th:if="${conference.thematiques != null && !conference.thematiques.isEmpty()}">
+        <li th:each="thematique : ${conference.thematiques}" th:text="${thematique}"></li>
+      </ul>
+      <span th:if="${conference.thematiques == null || conference.thematiques.isEmpty()}">-</span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<p style="margin-top: 20px;">
+  <a href="/">Retour à l'accueil</a> |
+  <a href="/gestionconf/conference/insert/insert.html">Ajouter une conférence</a>
+</p>
+</body>
+</html>

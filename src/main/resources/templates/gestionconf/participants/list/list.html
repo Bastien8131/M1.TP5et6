@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Liste des Participants</title>
+</head>
+<body>
+<h1>Liste des Participants</h1>
+
+<div th:if="${participants == null}">
+  <p>Aucun participant n'a été enregistré.</p>
+</div>
+
+<table th:if="${participants != null}">
+  <thead>
+  <tr>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>Organisme</th>
+    <th>Email</th>
+    <th>Pays</th>
+    <th>Ville</th>
+    <th>Date d'inscription</th>
+    <th>Statut</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="participant : ${participants}">
+    <td th:text="${participant.nomPart}"></td>
+    <td th:text="${participant.prenomPart}"></td>
+    <td th:text="${participant.organismePart}"></td>
+    <td th:text="${participant.emailPart}"></td>
+    <td th:text="${participant.paysPart}"></td>
+    <td th:text="${participant.villePart}"></td>
+    <td th:text="${participant.dtInscription}"></td>
+    <td th:text="${participant.statut}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<p>
+  <a href="/">Retour à l'accueil</a> |
+  <a href="/gestionconf/participants/insert/insert.html">Ajouter un participant</a>
+</p>
+</body>
+</html>

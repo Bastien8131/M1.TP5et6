@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="/gestionconf/message/message.css">
+</head>
+  <body>
+  <div class="message-container" th:if="${msgTitre != null}">
+    <div class="message" th:classappend="${msgStatut == 'erreur'} ? 'message-erreur' : 'message-ok'">
+      <h3 th:text="${msgTitre}">Titre du message</h3>
+      <p th:if="${msgContenu != null}" th:text="${msgContenu}">Contenu du message</p>
+    </div>
+    <div class="actions">
+      <a href="/" class="btn btn-secondary">Retour</a>
+    </div>
+  </div>
+  </body>
+</html>

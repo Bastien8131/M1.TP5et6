@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div>
+  <h1>Calcul des entiers et de leurs carrés</h1>
+  <form action="/math/calc" method="get">
+    <label for="inf">Borne inférieure :</label>
+    <input type="number" name="inf" id="inf" th:value="${inf}">
+    <label for="sup">Borne supérieure :</label>
+    <input type="number" name="sup" id="sup" th:value="${sup}">
+    <button type="submit">Calculer</button>
+  </form>
+
+  <div th:if="${results != null}">
+    <h2>Résultats pour les nombres entre <span th:text="${inf}"></span> et <span th:text="${sup}"></span></h2>
+    <table>
+      <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Carré</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="result : ${results}">
+        <td th:text="${result.number}"></td>
+        <td th:text="${result.square}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><a href="/">Retour à l'accueil</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<main>
+  <div>
+    <ul>
+      <li><a href="/gestionconf/participants/form">Créer un compte participant</a></li>
+      <li><a href="/gestionconf/participants/list">Liste des participants</a></li>
+      <li><a href="/gestionconf/conferences/form">Créer une nouvelle conférence</a></li>
+      <li><a href="/gestionconf/conferences/list">Liste des conférences</a></li>
+    </ul>
+
+    <form action="/gestionconf/participants/connect" method="POST"  th:if="${session.utilisateur == null}">
+      <input type="email" name="email" placeholder="Email" value="test.user@example.com" >
+      <input type="password" name="password" placeholder="Mot de passe" value="password" >
+      <button type="submit">Se connecter</button>
+    </form>
+
+    <div th:if="${session.utilisateur != null}">
+      <h2>Informations de l'utilisateur connecté</h2>
+      <p>
+        Nom: <span th:text="${session.utilisateur.getNomPart()}"></span><br>
+        Prénom: <span th:text="${session.utilisateur.prenomPart}"></span><br>
+        Email: <span th:text="${session.utilisateur.emailPart}"></span><br>
+      </p>
+      <a href="/gestionconf/participants/deconnect">Déconnexions</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

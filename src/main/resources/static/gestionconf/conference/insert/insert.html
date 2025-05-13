@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajouter une Conférence</title>
+</head>
+<body>
+<h1>Ajouter une Conférence</h1>
+<form action="/gestionconf/conferences/insert" method="post">
+  <label for="titreCongres">Titre du Congrès:</label>
+  <input type="text" id="titreCongres" name="titreCongres" required><br>
+
+  <label for="numEditionCongres">Numéro d'Édition:</label>
+  <input type="number" id="numEditionCongres" name="numEditionCongres" required><br>
+
+  <label for="dtDebutCongres">Date de Début:</label>
+  <input type="date" id="dtDebutCongres" name="dtDebutCongres" required><br>
+
+  <label for="dtFinCongres">Date de Fin:</label>
+  <input type="date" id="dtFinCongres" name="dtFinCongres" required><br>
+
+  <label for="urlSiteWebCongres">Site Web:</label>
+  <input type="url" id="urlSiteWebCongres" name="urlSiteWebCongres"><br>
+
+  <label>Activités:</label><br>
+  <div class="checkbox-group">
+    <div>
+      <input type="checkbox" id="activite1" name="activites" value="Visite guidée de la ville">
+      <label for="activite1">Visite guidée de la ville</label>
+    </div>
+    <div>
+      <input type="checkbox" id="activite2" name="activites" value="Repas de gala">
+      <label for="activite2">Repas de gala</label>
+    </div>
+    <div>
+      <input type="checkbox" id="activite3" name="activites" value="Repas rencontre">
+      <label for="activite3">Repas rencontre</label>
+    </div>
+  </div><br>
+
+  <label>Thématiques:</label><br>
+  <div class="checkbox-group">
+    <div>
+      <input type="checkbox" id="theme1" name="thematiques" value="Comptabilité-Contrôle">
+      <label for="theme1">Comptabilité-Contrôle</label>
+    </div>
+    <div>
+      <input type="checkbox" id="theme2" name="thematiques" value="Ressources Humaines">
+      <label for="theme2">Ressources Humaines</label>
+    </div>
+    <div>
+      <input type="checkbox" id="theme3" name="thematiques" value="Marketing">
+      <label for="theme3">Marketing</label>
+    </div>
+    <div>
+      <input type="checkbox" id="theme4" name="thematiques" value="Finance">
+      <label for="theme4">Finance</label>
+    </div>
+    <div>
+      <input type="checkbox" id="theme5" name="thematiques" value="Gestion des SI">
+      <label for="theme5">Gestion des SI</label>
+    </div>
+    <div>
+      <input type="checkbox" id="theme6" name="thematiques" value="Gestion de projets informatiques">
+      <label for="theme6">Gestion de projets informatiques</label>
+    </div>
+    <div>
+      <input type="checkbox" id="theme7" name="thematiques" value="Business Intelligence">
+      <label for="theme7">Business Intelligence</label>
+    </div>
+    <div>
+      <input type="checkbox" id="theme8" name="thematiques" value="Informatique Décisionnelle">
+      <label for="theme8">Informatique Décisionnelle</label>
+    </div>
+    <div>
+      <input type="checkbox" id="theme9" name="thematiques" value="Veille Stratégique">
+      <label for="theme9">Veille Stratégique</label>
+    </div>
+  </div><br>
+
+  <button type="submit">Ajouter</button>
+</form>
+</body>
+</html>
+<script src="insert.js"></script>

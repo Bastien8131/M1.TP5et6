@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajouter un Participant</title>
+</head>
+<body>
+<h1>Ajouter un Participant</h1>
+<form action="/gestionconf/participants/insert" method="post">
+  <label for="nomPart">Nom:</label>
+  <input type="text" id="nomPart" name="nomPart" required><br>
+
+  <label for="prenomPart">Prénom:</label>
+  <input type="text" id="prenomPart" name="prenomPart" required><br>
+
+  <label for="organismePart">Organisme:</label>
+  <input type="text" id="organismePart" name="organismePart" required><br>
+
+  <label for="cpPart">Code Postal:</label>
+  <input type="number" id="cpPart" name="cpPart" required><br>
+
+  <label for="adrPart">Adresse:</label>
+  <input type="text" id="adrPart" name="adrPart" required><br>
+
+  <label for="villePart">Ville:</label>
+  <input type="text" id="villePart" name="villePart" required><br>
+
+  <label for="paysPart">Pays:</label>
+  <input type="text" id="paysPart" name="paysPart" required><br>
+
+  <label for="emailPart">Email:</label>
+  <input type="email" id="emailPart" name="emailPart" required><br>
+
+  <label for="dtInscription">Date d'Inscription:</label>
+  <input type="date" id="dtInscription" name="dtInscription" required><br>
+
+  <label>Statut:</label><br>
+  <input type="radio" id="statutEtudiant" name="statut" value="Etudiant" required>
+  <label for="statutEtudiant">Etudiant</label><br>
+  <input type="radio" id="statutUniversitaire" name="statut" value="Universitaire" required>
+  <label for="statutUniversitaire">Universitaire</label><br>
+  <input type="radio" id="statutEntreprise" name="statut" value="Entreprise" required>
+  <label for="statutEntreprise">Entreprise</label><br>
+
+  <label for="password">Mot de Passe:</label>
+  <input type="password" id="password" name="password" required><br>
+
+  <button type="submit">Ajouter</button>
+</form>
+</body>
+</html>
+<script src="insert.js"></script>
