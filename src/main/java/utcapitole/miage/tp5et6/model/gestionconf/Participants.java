@@ -1,5 +1,7 @@
 package utcapitole.miage.tp5et6.model.gestionconf;
 
+import java.sql.PreparedStatement;
+
 public class Participants {
     private Long codParticipant;
     private String nomPart;
@@ -154,6 +156,51 @@ public class Participants {
         "statut TEXT, " +
         "password TEXT" +
         ")";
+
+    public int insertDB(String url){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
+            java.sql.Statement stmt = conn.createStatement();
+
+            PreparedStatement stmtP = conn.prepareStatement(
+                    "INSERT INTO PARTICIPANTS (" +
+                            "nomPart," +
+                            "prenomPart," +
+                            "organismePart," +
+                            "cpPart," +
+                            "adrPart," +
+                            "villePart," +
+                            "paysPart," +
+                            "emailPart," +
+                            "dtInscription," +
+                            "statut," +
+                            "password) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            );
+
+            stmtP.setString(1, this.nomPart);
+            stmtP.setString(2, this.prenomPart);
+            stmtP.setString(3, this.organismePart);
+            stmtP.setInt(4, this.cpPart);
+            stmtP.setString(5, this.adrPart);
+            stmtP.setString(6, this.villePart);
+            stmtP.setString(7, this.paysPart);
+            stmtP.setString(8, this.emailPart);
+            stmtP.setString(9, this.dtInscription);
+            stmtP.setString(10, this.statut.toString());
+            stmtP.setString(11, this.password);
+
+            stmtP.executeUpdate();
+            stmt.close();
+            conn.close();
+            return 1;
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'insertion dans la table PARTICIPANTS : " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }
 
 

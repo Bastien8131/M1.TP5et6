@@ -1,5 +1,9 @@
 package utcapitole.miage.tp5et6.db;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.List;
+
 public class DB {
 
     public static boolean testConnect(String url){
@@ -88,19 +92,91 @@ public class DB {
             java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
             java.sql.Statement stmt = conn.createStatement();
 
+            //Req pour creal les DB
+            stmt.execute("DELETE FROM STATUS");
+            stmt.execute("DELETE FROM ACTIVITES");
+            stmt.execute("DELETE FROM THEMATIQUES");
+
+            //Req pour saisir les donnée de Status
             stmt.execute("INSERT INTO STATUS (codStatus, nomStatus) VALUES (1, 'Etudiant')");
             stmt.execute("INSERT INTO STATUS (codStatus, nomStatus) VALUES (2, 'Universitaire')");
             stmt.execute("INSERT INTO STATUS (codStatus, nomStatus) VALUES (3, 'Entreprise')");
 
+            //Req pour saisir les donnée de ACTIVITES
             stmt.execute(
                     "INSERT INTO ACTIVITES (codAct, nomAct, prixAct) " +
-                            "VALUES (1, 'Visite guidée de la ville', 120)"
+                            "VALUES (1, 'Visite guidée de la ville', 50)"
             );
+            stmt.execute(
+                    "INSERT INTO ACTIVITES (codAct, nomAct, prixAct) " +
+                            "VALUES (2, 'repas de gala', 120)"
+            );
+            stmt.execute(
+                    "INSERT INTO ACTIVITES (codAct, nomAct, prixAct) " +
+                            "VALUES (3, 'repas rencontre', 70)"
+            );
+
+            //Req pour saisir les donnée de THEMATIQUES
+            PreparedStatement stmtTh = conn.prepareStatement(
+                    "INSERT INTO THEMATIQUES (codTh, nomTh) VALUES (?, ?)"
+            );
+
+            String[] thList = {
+                "Comptabilité-Contrôle",
+                "Ressources Humaines",
+                "Marketing","Finance",
+                "Gestion des SI",
+                "Gestion de projets informatiques",
+                "Business Intelligence",
+                "Informatique Décisionnelle",
+                "Veille Stratégique"
+            };
+
+
+            for (int i = 0; i < thList.length; i++) {
+                stmtTh.setInt(1, i);
+                stmtTh.setString(2, thList[i]);
+                stmtTh.executeUpdate();
+            }
 
 
             stmt.close();
             conn.close();
             System.out.println("Values inserted into STATUS table successfully.");
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'initialisation des tables : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void displayTables(String url){
+        try{
+            Class.forName("org.sqlite.JDBC");
+            java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
+            java.sql.Statement stmt = conn.createStatement();
+
+            String[] queries = {
+                "SELECT * FROM ACTIVITES",
+                "SELECT * FROM THEMATIQUES",
+                "SELECT * FROM PARTICIPANTS",
+                "SELECT * FROM CONFERENCES",
+                "SELECT * FROM STATUS"
+            };
+
+            for (String query : queries) {
+                ResultSet rs = stmt.executeQuery(query);
+                int columnCount = rs.getMetaData().getColumnCount();
+                while (rs.next()) {
+                    for (int i = 1; i <= columnCount; i++) {
+                        System.out.print(rs.getString(i) + "\t");
+                    }
+                    System.out.println();
+                }
+                System.out.println("\n");
+                rs.close();
+            }
+
+            conn.close();
         } catch (Exception e) {
             System.out.println("Erreur lors de l'initialisation des tables : " + e.getMessage());
             e.printStackTrace();

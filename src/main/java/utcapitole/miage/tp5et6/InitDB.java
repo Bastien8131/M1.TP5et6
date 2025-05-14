@@ -28,5 +28,11 @@ public class InitDB {
         } else {
             System.out.println("Failed to create tables.");
         }
+
+        DB.initTables(dbconfig.getDburl());
+
+        DB.displayTables(dbconfig.getDburl());
+
+
     }
 }
