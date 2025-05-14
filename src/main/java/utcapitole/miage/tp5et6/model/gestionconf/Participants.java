@@ -13,10 +13,10 @@ public class Participants {
     private String paysPart;
     private String emailPart;
     private String dtInscription;
-    private StatutParticipants statut;
+    private Integer statut;
     private String password;
 
-    public Participants(Long codParticipant, String nomPart, String prenomPart, String organismePart, Integer cpPart, String adrPart, String villePart, String paysPart, String emailPart, String dtInscription, StatutParticipants statut, String password) {
+    public Participants(Long codParticipant, String nomPart, String prenomPart, String organismePart, Integer cpPart, String adrPart, String villePart, String paysPart, String emailPart, String dtInscription, Integer statut, String password) {
         this.codParticipant = codParticipant;
         this.nomPart = nomPart;
         this.prenomPart = prenomPart;
@@ -111,9 +111,9 @@ public class Participants {
         this.dtInscription = dtInscription;
     }
 
-    public StatutParticipants getStatut() { return statut; }
+    public Integer getStatut() { return statut; }
 
-    public void setStatut(StatutParticipants statut) { this.statut = statut; }
+    public void setStatut(Integer statut) { this.statut = statut; }
 
     public String getPassword() {
         return password;
@@ -188,7 +188,7 @@ public class Participants {
             stmtP.setString(7, this.paysPart);
             stmtP.setString(8, this.emailPart);
             stmtP.setString(9, this.dtInscription);
-            stmtP.setString(10, this.statut.toString());
+            stmtP.setInt(10, this.statut);
             stmtP.setString(11, this.password);
 
             stmtP.executeUpdate();

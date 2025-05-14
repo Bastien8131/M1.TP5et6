@@ -33,7 +33,12 @@
     <td th:text="${participant.paysPart}"></td>
     <td th:text="${participant.villePart}"></td>
     <td th:text="${participant.dtInscription}"></td>
-    <td th:text="${participant.statut}"></td>
+    <td th:switch="${participant.statut}">
+      <span th:case="1">Etudiant</span>
+      <span th:case="2">Universitaire</span>
+      <span th:case="3">Entreprise</span>
+      <span th:case="*">Inconnu</span>
+    </td>
   </tr>
   </tbody>
 </table>

@@ -28,7 +28,7 @@ public class ParticipantsController {
                 "TestCountry",
                 "test.user@example.com",
                 "2023-10-01",
-                StatutParticipants.Etudiant,
+                1,
                 "password"
         );
         participants.add(testParticipant);
