@@ -15,6 +15,21 @@ public class Participants {
     private String dtInscription;
     private Integer statut;
     private String password;
+    public static final String CREATE_TABLE_SQL =
+            "CREATE TABLE IF NOT EXISTS PARTICIPANTS (" +
+                    "codParticipant INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "nomPart TEXT NOT NULL, " +
+                    "prenomPart TEXT, " +
+                    "organismePart TEXT, " +
+                    "cpPart INTEGER, " +
+                    "adrPart TEXT, " +
+                    "villePart TEXT, " +
+                    "paysPart TEXT, " +
+                    "emailPart TEXT, " +
+                    "dtInscription TEXT, " +
+                    "statut TEXT, " +
+                    "password TEXT" +
+                    ")";
 
     public Participants(Long codParticipant, String nomPart, String prenomPart, String organismePart, Integer cpPart, String adrPart, String villePart, String paysPart, String emailPart, String dtInscription, Integer statut, String password) {
         this.codParticipant = codParticipant;
@@ -140,22 +155,6 @@ public class Participants {
                 ", password='" + password + '\'' +
                 '}';
     }
-
-    public static final String CREATE_TABLE_SQL =
-        "CREATE TABLE IF NOT EXISTS PARTICIPANTS (" +
-        "codParticipant INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "nomPart TEXT NOT NULL, " +
-        "prenomPart TEXT, " +
-        "organismePart TEXT, " +
-        "cpPart INTEGER, " +
-        "adrPart TEXT, " +
-        "villePart TEXT, " +
-        "paysPart TEXT, " +
-        "emailPart TEXT, " +
-        "dtInscription TEXT, " +
-        "statut TEXT, " +
-        "password TEXT" +
-        ")";
 
     public int insertDB(String url){
         try {
