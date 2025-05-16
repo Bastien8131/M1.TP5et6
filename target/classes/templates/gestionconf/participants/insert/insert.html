@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajouter un Participant</title>
+</head>
+<body>
+<h1>Ajouter un Participant</h1>
+<form action="/gestionconf/participants/insert" method="post">
+  <input type="hidden" name="codParticipant" value="0">
+
+  <label for="nomPart">Nom:</label>
+  <input type="text" id="nomPart" name="nomPart" required><br>
+
+  <label for="prenomPart">Prénom:</label>
+  <input type="text" id="prenomPart" name="prenomPart" required><br>
+
+  <label for="organismePart">Organisme:</label>
+  <input type="text" id="organismePart" name="organismePart" required><br>
+
+  <label for="cpPart">Code Postal:</label>
+  <input type="number" id="cpPart" name="cpPart" required><br>
+
+  <label for="adrPart">Adresse:</label>
+  <input type="text" id="adrPart" name="adrPart" required><br>
+
+  <label for="villePart">Ville:</label>
+  <input type="text" id="villePart" name="villePart" required><br>
+
+  <label for="paysPart">Pays:</label>
+  <input type="text" id="paysPart" name="paysPart" required><br>
+
+  <label for="emailPart">Email:</label>
+  <input type="email" id="emailPart" name="emailPart" required><br>
+
+  <label for="dtInscription">Date d'Inscription:</label>
+  <input type="date" id="dtInscription" name="dtInscription" required><br>
+
+  <label>Statut:</label><br>
+  <div th:each="statut : ${statuts}">
+    <input type="radio" th:id="'statut' + ${statut.codStatus}" name="statut" th:value="${statut.codStatus}" required>
+    <label th:for="'statut' + ${statut.codStatus}" th:text="${statut.nomStatus}"></label><br>
+  </div>
+
+  <label for="password">Mot de Passe:</label>
+  <input type="password" id="password" name="password" required><br>
+
+  <button type="submit">Ajouter</button>
+</form>
+<script th:inline="javascript">
+    //TEST
+    function autoFillForm() {
+        document.getElementById("nomPart").value = "Dupont";
+        document.getElementById("prenomPart").value = "Jean";
+        document.getElementById("organismePart").value = "Université";
+        document.getElementById("cpPart").value = "31000";
+        document.getElementById("adrPart").value = "1 Rue de l'Université";
+        document.getElementById("villePart").value = "Toulouse";
+        document.getElementById("paysPart").value = "France";
+        document.getElementById("emailPart").value = "jean.dupont@example.com";
+        document.getElementById("dtInscription").value = "2023-10-01";
+
+        // Cocher le statut universitaire si disponible
+        if(document.getElementById("statut2")) {
+            document.getElementById("statut2").checked = true;
+        }
+
+        document.getElementById("password").value = "0000";
+    }
+
+    document.addEventListener("DOMContentLoaded", autoFillForm);
+</script>
+</body>
+</html>

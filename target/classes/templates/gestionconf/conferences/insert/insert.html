@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajouter une Conférence</title>
+</head>
+<body>
+<h1>Ajouter une Conférence</h1>
+<form action="/gestionconf/conferences/insert" method="post">
+  <label for="titreCongres">Titre du Congrès:</label>
+  <input type="text" id="titreCongres" name="titreCongres" required><br>
+
+  <label for="numEditionCongres">Numéro d'Édition:</label>
+  <input type="number" id="numEditionCongres" name="numEditionCongres" required><br>
+
+  <label for="dtDebutCongres">Date de Début:</label>
+  <input type="date" id="dtDebutCongres" name="dtDebutCongres" required><br>
+
+  <label for="dtFinCongres">Date de Fin:</label>
+  <input type="date" id="dtFinCongres" name="dtFinCongres" required><br>
+
+  <label for="urlSiteWebCongres">Site Web:</label>
+  <input type="url" id="urlSiteWebCongres" name="urlSiteWebCongres"><br>
+
+  <label>Activités:</label><br>
+  <div class="checkbox-group">
+    <div th:each="activite : ${activites}">
+      <input type="checkbox" th:id="'activite' + ${activite.codAct}" name="activites" th:value="${activite.codAct}">
+      <label th:for="'activite' + ${activite.codAct}" th:text="${activite.nomAct} + ' (' + ${activite.prixAct} + '€)'"></label>
+    </div>
+  </div><br>
+
+  <label>Thématiques:</label><br>
+  <div class="checkbox-group">
+    <div th:each="thematique : ${thematiques}">
+      <input type="checkbox" th:id="'theme' + ${thematique.codTh}" name="thematiques" th:value="${thematique.codTh}">
+      <label th:for="'theme' + ${thematique.codTh}" th:text="${thematique.nomTh}"></label>
+    </div>
+  </div><br>
+
+  <button type="submit">Ajouter</button>
+</form>
+<script th:inline="javascript">
+    // Fonction pour auto-compléter le formulaire avec des données d'exemple
+    function autoCompleteForm() {
+        document.getElementById("titreCongres").value = "Conférence Internationale 2023";
+        document.getElementById("numEditionCongres").value = "5";
+        document.getElementById("dtDebutCongres").value = "2023-12-01";
+        document.getElementById("dtFinCongres").value = "2023-12-05";
+        document.getElementById("urlSiteWebCongres").value = "https://www.conference-exemple.com";
+
+        // Cocher quelques activités
+        if(document.getElementById("activite1")) {
+            document.getElementById("activite1").checked = true;
+        }
+        if(document.getElementById("activite2")) {
+            document.getElementById("activite2").checked = true;
+        }
+
+        // Cocher quelques thématiques
+        if(document.getElementById("theme0")) {
+            document.getElementById("theme0").checked = true;
+        }
+        if(document.getElementById("theme3")) {
+            document.getElementById("theme3").checked = true;
+        }
+        if(document.getElementById("theme5")) {
+            document.getElementById("theme5").checked = true;
+        }
+    }
+
+    // Appeler la fonction pour tester
+    document.addEventListener("DOMContentLoaded", autoCompleteForm);
+</script>
+</body>
+</html>
