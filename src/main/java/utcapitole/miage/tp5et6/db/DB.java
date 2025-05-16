@@ -41,7 +41,26 @@ public class DB {
             java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
             java.sql.Statement stmt = conn.createStatement();
 
-            stmt.execute(utcapitole.miage.tp5et6.model.gestionconf.Conferences.CREATE_TABLE_SQL);
+            stmt.execute("DROP TABLE IF EXISTS CONF_THEMATIQUES");
+            stmt.execute("DROP TABLE IF EXISTS CONF_ACTIVITES");
+            stmt.execute("DROP TABLE IF EXISTS INSCRIPTIONS");
+            stmt.execute("DROP TABLE IF EXISTS PARTICIPANTS");
+            stmt.execute("DROP TABLE IF EXISTS CONFERENCES");
+            stmt.execute("DROP TABLE IF EXISTS STATUS");
+            stmt.execute("DROP TABLE IF EXISTS ACTIVITES");
+            stmt.execute("DROP TABLE IF EXISTS THEMATIQUES");
+            stmt.execute("DROP TABLE IF EXISTS CONF_STATUS");
+
+            stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS CONFERENCES (" +
+                            "CodCongres INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "titreCongres TEXT NOT NULL, " +
+                            "numEditionCongres INTEGER, " +
+                            "dtDebutCongres TEXT, " +
+                            "dtFinCongres TEXT, " +
+                            "urlSiteWebCongres TEXT" +
+                            ")"
+            );
             stmt.execute(utcapitole.miage.tp5et6.model.gestionconf.Participants.CREATE_TABLE_SQL);
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS INSCRIPTIONS (" +
@@ -73,6 +92,28 @@ public class DB {
                     "CREATE TABLE IF NOT EXISTS THEMATIQUES (" +
                             "codTh INTEGER PRIMARY KEY, " +
                             "nomTh TEXT NOT NULL " +
+                            ")"
+            );
+
+            // Add junction table for CONFERENCES and THEMATIQUES
+            stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS CONF_THEMATIQUES (" +
+                            "codCongres INTEGER, " +
+                            "codTh INTEGER, " +
+                            "PRIMARY KEY (codCongres, codTh), " +
+                            "FOREIGN KEY (codCongres) REFERENCES CONFERENCES(CodCongres), " +
+                            "FOREIGN KEY (codTh) REFERENCES THEMATIQUES(codTh)" +
+                            ")"
+            );
+
+            // Add junction table for CONFERENCES and ACTIVITES
+            stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS CONF_ACTIVITES (" +
+                            "codCongres INTEGER, " +
+                            "codAct INTEGER, " +
+                            "PRIMARY KEY (codCongres, codAct), " +
+                            "FOREIGN KEY (codCongres) REFERENCES CONFERENCES(CodCongres), " +
+                            "FOREIGN KEY (codAct) REFERENCES ACTIVITES(codAct)" +
                             ")"
             );
 

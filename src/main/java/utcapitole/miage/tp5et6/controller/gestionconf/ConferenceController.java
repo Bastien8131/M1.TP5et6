@@ -23,9 +23,16 @@ public class ConferenceController {
             @RequestParam String dtDebutCongres,
             @RequestParam String dtFinCongres,
             @RequestParam String urlSiteWebCongres,
-            @RequestParam String activites,
-            @RequestParam String thematiques
+            @RequestParam(required = false) List<Integer> activites,
+            @RequestParam(required = false) List<Integer> thematiques
     ) {
+        if (activites == null) {
+            activites = new ArrayList<>();
+        }
+        if (thematiques == null) {
+            thematiques = new ArrayList<>();
+        }
+
         conferences.add(new Conferences(
                 (long) conferences.size() + 1,
                 titreCongres,
@@ -33,8 +40,8 @@ public class ConferenceController {
                 dtDebutCongres,
                 dtFinCongres,
                 urlSiteWebCongres,
-                activites,
-                thematiques
+                thematiques,
+                activites
         ));
         return "redirect:/";
     }
@@ -44,6 +51,4 @@ public class ConferenceController {
         model.addAttribute("conferences", conferences);
         return "gestionconf/conferences/list/list";
     }
-
-
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Liste des Conférences</title>
 </head>
 <body>
 <h1>Liste des Conférences</h1>
@@ -35,13 +35,33 @@
     </td>
     <td>
       <ul th:if="${conference.activites != null && !conference.activites.isEmpty()}">
-        <li th:each="activite : ${conference.activites}" th:text="${activite}"></li>
+        <li th:each="activiteId : ${conference.activites}">
+          <span th:switch="${activiteId}">
+            <span th:case="1">Visite guidée de la ville</span>
+            <span th:case="2">Repas de gala</span>
+            <span th:case="3">Repas rencontre</span>
+            <span th:case="*">Activité inconnue (ID: [[${activiteId}]])</span>
+          </span>
+        </li>
       </ul>
       <span th:if="${conference.activites == null || conference.activites.isEmpty()}">-</span>
     </td>
     <td>
       <ul th:if="${conference.thematiques != null && !conference.thematiques.isEmpty()}">
-        <li th:each="thematique : ${conference.thematiques}" th:text="${thematique}"></li>
+        <li th:each="thematiqueId : ${conference.thematiques}">
+          <span th:switch="${thematiqueId}">
+            <span th:case="0">Comptabilité-Contrôle</span>
+            <span th:case="1">Ressources Humaines</span>
+            <span th:case="2">Marketing</span>
+            <span th:case="3">Finance</span>
+            <span th:case="4">Gestion des SI</span>
+            <span th:case="5">Gestion de projets informatiques</span>
+            <span th:case="6">Business Intelligence</span>
+            <span th:case="7">Informatique Décisionnelle</span>
+            <span th:case="8">Veille Stratégique</span>
+            <span th:case="*">Thématique inconnue (ID: [[${thematiqueId}]])</span>
+          </span>
+        </li>
       </ul>
       <span th:if="${conference.thematiques == null || conference.thematiques.isEmpty()}">-</span>
     </td>
@@ -51,7 +71,7 @@
 
 <p style="margin-top: 20px;">
   <a href="/">Retour à l'accueil</a> |
-  <a href="/gestionconf/conference/insert/insert.html">Ajouter une conférence</a>
+  <a href="/gestionconf/conferences/form">Ajouter une conférence</a>
 </p>
 </body>
 </html>
