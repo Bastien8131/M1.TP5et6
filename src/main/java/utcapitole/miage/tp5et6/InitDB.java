@@ -34,7 +34,7 @@ public class InitDB {
                 "2023-10-03",
                 "www.conference.com",
                 List.of(1, 2, 3),
-                List.of(4, 5)
+                List.of(1, 2)
         );
 
         // Test connection

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Modifier le Participant</title>
+</head>
+<body>
+<h1>Modifier le Participant</h1>
+<form action="/gestionconf/participants/update" method="post">
+  <input type="hidden" name="codParticipant" th:value="${fetchParticipant.codParticipant}">
+
+  <label for="nomPart">Nom:</label>
+  <input type="text" id="nomPart" name="nomPart" th:value="${fetchParticipant.nomPart}" required><br>
+
+  <label for="prenomPart">Prénom:</label>
+  <input type="text" id="prenomPart" name="prenomPart" th:value="${fetchParticipant.prenomPart}" required><br>
+
+  <label for="organismePart">Organisme:</label>
+  <input type="text" id="organismePart" name="organismePart" th:value="${fetchParticipant.organismePart}" required><br>
+
+  <label for="cpPart">Code Postal:</label>
+  <input type="number" id="cpPart" name="cpPart" th:value="${fetchParticipant.cpPart}" required><br>
+
+  <label for="adrPart">Adresse:</label>
+  <input type="text" id="adrPart" name="adrPart" th:value="${fetchParticipant.adrPart}" required><br>
+
+  <label for="villePart">Ville:</label>
+  <input type="text" id="villePart" name="villePart" th:value="${fetchParticipant.villePart}" required><br>
+
+  <label for="paysPart">Pays:</label>
+  <input type="text" id="paysPart" name="paysPart" th:value="${fetchParticipant.paysPart}" required><br>
+
+  <label for="emailPart">Email:</label>
+  <input type="email" id="emailPart" name="emailPart" th:value="${fetchParticipant.emailPart}" required><br>
+
+  <label for="dtInscription">Date d'Inscription:</label>
+  <input type="date" id="dtInscription" name="dtInscription" th:value="${fetchParticipant.dtInscription}" required><br>
+
+  <label>Statut:</label><br>
+  <div th:each="statut : ${statuts}">
+    <input type="radio" th:id="'statut' + ${statut.codStatus}" name="statut" th:value="${statut.codStatus}"
+           th:checked="${fetchParticipant.statut == statut.codStatus}" required>
+    <label th:for="'statut' + ${statut.codStatus}" th:text="${statut.nomStatus}"></label><br>
+  </div>
+
+  <label for="password">Mot de Passe:</label>
+  <input type="password" id="password" name="password" th:value="${fetchParticipant.password}" required><br>
+
+  <button type="submit">Mettre a jour</button>
+</form>
+</body>
+</html>

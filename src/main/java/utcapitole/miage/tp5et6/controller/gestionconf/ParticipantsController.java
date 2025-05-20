@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import utcapitole.miage.tp5et6.db.DB;
 import utcapitole.miage.tp5et6.db.DBConfig;
 import utcapitole.miage.tp5et6.model.gestionconf.Participants;
 
@@ -25,8 +26,8 @@ public class ParticipantsController {
         this.dbConfig = new DBConfig();
     }
 
-    @GetMapping("/form")
-    public String showForm(Model model) {
+    @GetMapping("/form/insert")
+    public String showFormInsert(Model model) {
         // Récupération des statuts depuis la base de données
         List<Map<String, Object>> statuts = new ArrayList<>();
         try {
@@ -51,6 +52,40 @@ public class ParticipantsController {
 
         model.addAttribute("statuts", statuts);
         return "gestionconf/participants/insert/insert";
+    }
+
+    @GetMapping("/form/update/{codParticipant}")
+    public String showFormUpdate(@PathVariable Integer codParticipant, Model model) {
+        List<Map<String, Object>> statuts = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(dbConfig.getDburl());
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM STATUS");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Map<String, Object> statut = new HashMap<>();
+                statut.put("codStatus", rs.getInt("codStatus"));
+                statut.put("nomStatus", rs.getString("nomStatus"));
+                statuts.add(statut);
+            }
+
+
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la récupération des statuts : " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        model.addAttribute("statuts", statuts);
+        model.addAttribute(
+                "fetchParticipant",
+                DB.getPartFromDB(dbConfig.getDburl(), codParticipant)
+        );
+
+        return "gestionconf/participants/update/update";
     }
 
     @PostMapping("/insert")
@@ -98,6 +133,34 @@ public class ParticipantsController {
             System.out.println("Erreur lors de l'insertion dans la table PARTICIPANTS : " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("msgTitre", "Erreur lors de la création du compte");
+            model.addAttribute("msgStatut", "erreur");
+            model.addAttribute("msgContenu", "Une erreur est survenue : " + e.getMessage());
+            return "gestionconf/message/message";
+        }
+    }
+
+    @PostMapping("/update")
+    public String updateParticipants(@ModelAttribute Participants participant, Model model) {
+        System.out.println(participant);
+
+        try {
+            int result = participant.updateDB(dbConfig.getDburl());
+
+            if (result > 0) {
+                model.addAttribute("msgTitre", "Compte mis à jour avec succès !");
+                model.addAttribute("msgStatut", "ok");
+                model.addAttribute("participant", participant);
+            } else {
+                model.addAttribute("msgTitre", "Erreur lors de la mise à jour du compte");
+                model.addAttribute("msgStatut", "erreur");
+                model.addAttribute("participant", participant);
+            }
+
+            return "gestionconf/message/message";
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la mise à jour dans la table PARTICIPANTS : " + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("msgTitre", "Erreur lors de la mise à jour du compte");
             model.addAttribute("msgStatut", "erreur");
             model.addAttribute("msgContenu", "Une erreur est survenue : " + e.getMessage());
             return "gestionconf/message/message";

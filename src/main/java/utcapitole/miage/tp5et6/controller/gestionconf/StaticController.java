@@ -11,7 +11,7 @@ public class StaticController {
         return "redirect:/index.html";
     }
 
-    @RequestMapping("/gestionconf/participants/form")
+    @RequestMapping("/gestionconf/participants/form/insert")
     public String goToFormParticipants() {
         return "redirect:/gestionconf/participants/insert/insert.html";
     }

@@ -1,6 +1,7 @@
 package utcapitole.miage.tp5et6.model.gestionconf;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class Participants {
     private Long codParticipant;
@@ -27,7 +28,7 @@ public class Participants {
                     "paysPart TEXT, " +
                     "emailPart TEXT, " +
                     "dtInscription TEXT, " +
-                    "statut TEXT, " +
+                    "statut INTEGER, " +
                     "password TEXT" +
                     ")";
 
@@ -196,6 +197,52 @@ public class Participants {
             return 1;
         } catch (Exception e) {
             System.out.println("Erreur lors de l'insertion dans la table PARTICIPANTS : " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int updateDB(String url){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
+            java.sql.Statement stmt = conn.createStatement();
+
+            PreparedStatement stmtP = conn.prepareStatement(
+                    "UPDATE PARTICIPANTS SET " +
+                            "nomPart = ?," +
+                            "prenomPart = ?," +
+                            "organismePart = ?," +
+                            "cpPart = ?," +
+                            "adrPart = ?," +
+                            "villePart = ?," +
+                            "paysPart = ?," +
+                            "emailPart = ?," +
+                            "dtInscription = ?," +
+                            "statut = ?," +
+                            "password = ?" +
+                            "WHERE codParticipant = ?"
+            );
+
+            stmtP.setString(1, this.nomPart);
+            stmtP.setString(2, this.prenomPart);
+            stmtP.setString(3, this.organismePart);
+            stmtP.setInt(4, this.cpPart);
+            stmtP.setString(5, this.adrPart);
+            stmtP.setString(6, this.villePart);
+            stmtP.setString(7, this.paysPart);
+            stmtP.setString(8, this.emailPart);
+            stmtP.setString(9, this.dtInscription);
+            stmtP.setInt(10, this.statut);
+            stmtP.setString(11, this.password);
+            stmtP.setString(12, this.codParticipant.toString() );
+
+            stmtP.executeUpdate();
+            stmt.close();
+            conn.close();
+            return 1;
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'update dans la table PARTICIPANTS : " + e.getMessage());
             e.printStackTrace();
             return 0;
         }

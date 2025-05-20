@@ -22,6 +22,7 @@
     <th>Ville</th>
     <th>Date d'inscription</th>
     <th>Statut</th>
+    <th style="background: black; color: white">Action</th>
   </tr>
   </thead>
   <tbody>
@@ -38,6 +39,9 @@
       <span th:case="2">Universitaire</span>
       <span th:case="3">Entreprise</span>
       <span th:case="*">Inconnu</span>
+    </td>
+    <td>
+      <a th:href="'/gestionconf/participants/form/update/'+${participant.codParticipant}">Modifier</a>
     </td>
   </tr>
   </tbody>

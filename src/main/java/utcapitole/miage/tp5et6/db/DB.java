@@ -1,5 +1,7 @@
 package utcapitole.miage.tp5et6.db;
 
+import utcapitole.miage.tp5et6.model.gestionconf.Participants;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
@@ -62,16 +64,16 @@ public class DB {
                             ")"
             );
             stmt.execute(utcapitole.miage.tp5et6.model.gestionconf.Participants.CREATE_TABLE_SQL);
-            stmt.execute(
-                    "CREATE TABLE IF NOT EXISTS INSCRIPTIONS (" +
-                            "codCongres INTEGER, " +
-                            "codParticipant INTEGER, " +
-                            "dateInscription TEXT, " +
-                            "PRIMARY KEY (codCongres, codParticipant), " +
-                            "FOREIGN KEY (codCongres) REFERENCES CONFERENCES(CodCongres), " +
-                            "FOREIGN KEY (codParticipant) REFERENCES PARTICIPANTS(codParticipant)" +
-                            ")"
-            );
+//            stmt.execute(
+//                    "CREATE TABLE IF NOT EXISTS INSCRIPTIONS (" +
+//                            "codCongres INTEGER, " +
+//                            "codParticipant INTEGER, " +
+//                            "dateInscription TEXT, " +
+//                            "PRIMARY KEY (codCongres, codParticipant), " +
+//                            "FOREIGN KEY (codCongres) REFERENCES CONFERENCES(CodCongres), " +
+//                            "FOREIGN KEY (codParticipant) REFERENCES PARTICIPANTS(codParticipant)" +
+//                            ")"
+//            );
 
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS STATUS (" +
@@ -221,6 +223,46 @@ public class DB {
         } catch (Exception e) {
             System.out.println("Erreur lors de l'initialisation des tables : " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public static Participants getPartFromDB(String url, Integer id){
+        Participants p = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
+            java.sql.Statement stmt = conn.createStatement();
+
+            PreparedStatement stmtP = conn.prepareStatement(
+                    "SELECT * FROM PARTICIPANTS WHERE codParticipant = ?"
+            );
+
+            stmtP.setString(1, String.valueOf(id));
+            ResultSet rs = stmtP.executeQuery();
+            rs.next();
+
+            p = new Participants(
+                    rs.getLong("codParticipant"),
+                    rs.getString("nomPart"),
+                    rs.getString("prenomPart"),
+                    rs.getString("organismePart"),
+                    rs.getInt("cpPart"),
+                    rs.getString("adrPart"),
+                    rs.getString("villePart"),
+                    rs.getString("paysPart"),
+                    rs.getString("emailPart"),
+                    rs.getString("dtInscription"),
+                    rs.getInt("statut"),
+                    rs.getString("password")
+            );
+
+            stmt.close();
+            conn.close();
+            return p;
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'update dans la table PARTICIPANTS : " + e.getMessage());
+            e.printStackTrace();
+            return p;
         }
     }
 }
