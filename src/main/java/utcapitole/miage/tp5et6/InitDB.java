@@ -61,7 +61,7 @@ public class InitDB {
         DB.initTables(dbconfig.getDburl());
 
         p.insertDB(dbconfig.getDburl());
-        c.insertDB(dbconfig.getDburl());
+        c.insert(dbconfig.getDburl());
 
         DB.displayTables(dbconfig.getDburl());
 

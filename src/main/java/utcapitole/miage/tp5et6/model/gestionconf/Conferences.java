@@ -138,32 +138,36 @@ public class Conferences {
         return intList;
     }
 
-    public int insertDB(String url){
+    public int insert(String url){
         try {
             Class.forName("org.sqlite.JDBC");
             java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
-//            java.sql.Statement stmt = conn.createStatement();
 
             PreparedStatement stmtC = conn.prepareStatement(
                     "INSERT INTO CONFERENCES (" +
-                            "CodCongres," +
                             "titreCongres," +
                             "numEditionCongres," +
                             "dtDebutCongres," +
                             "dtFinCongres," +
                             "urlSiteWebCongres) " +
-                            "VALUES (?, ?, ?, ?, ?, ?)"
+                            "VALUES (?, ?, ?, ?, ?)",
+                    java.sql.Statement.RETURN_GENERATED_KEYS
             );
 
-            stmtC.setLong(1, this.CodCongres);
-            stmtC.setString(2, this.titreCongres);
-            stmtC.setInt(3, this.numEditionCongres);
-            stmtC.setString(4, this.dtDebutCongres);
-            stmtC.setString(5, this.dtFinCongres);
-            stmtC.setString(6, this.urlSiteWebCongres);
-
+            stmtC.setString(1, this.titreCongres);
+            stmtC.setInt(2, this.numEditionCongres);
+            stmtC.setString(3, this.dtDebutCongres);
+            stmtC.setString(4, this.dtFinCongres);
+            stmtC.setString(5, this.urlSiteWebCongres);
 
             stmtC.executeUpdate();
+
+            // Récupérer l'ID généré automatiquement
+            java.sql.ResultSet generatedKeys = stmtC.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                this.CodCongres = generatedKeys.getLong(1);
+            }
+            generatedKeys.close();
             stmtC.close();
 
             PreparedStatement stmtC_A = conn.prepareStatement(

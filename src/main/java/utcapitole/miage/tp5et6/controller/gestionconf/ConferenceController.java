@@ -11,14 +11,7 @@ import utcapitole.miage.tp5et6.model.gestionconf.Activites;
 import utcapitole.miage.tp5et6.model.gestionconf.Conferences;
 import utcapitole.miage.tp5et6.model.gestionconf.Thematiques;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/gestionconf/conferences")
@@ -49,34 +42,13 @@ public class ConferenceController {
             @RequestParam String dtDebutCongres,
             @RequestParam String dtFinCongres,
             @RequestParam String urlSiteWebCongres,
-            @RequestParam(required = false) List<Integer> activites,
-            @RequestParam(required = false) List<Integer> thematiques,
+            @RequestParam List<Integer> activites,
+            @RequestParam List<Integer> thematiques,
             Model model
     ) {
-        if (activites == null) {
-            activites = new ArrayList<>();
-        }
-        if (thematiques == null) {
-            thematiques = new ArrayList<>();
-        }
-
         try {
-            // Obtenir le prochain ID
-            long nextId;
-            Connection conn = DriverManager.getConnection(dbConfig.getDburl());
-            PreparedStatement stmt = conn.prepareStatement("SELECT MAX(CodCongres) FROM CONFERENCES");
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next() && rs.getObject(1) != null) {
-                nextId = rs.getLong(1) + 1;
-            } else {
-                nextId = 1L;
-            }
-            rs.close();
-            stmt.close();
-            conn.close();
-
             Conferences conference = new Conferences(
-                    nextId,
+                    64L, // REF ;)
                     titreCongres,
                     numEditionCongres,
                     dtDebutCongres,
@@ -86,7 +58,7 @@ public class ConferenceController {
                     activites
             );
 
-            int result = conference.insertDB(dbConfig.getDburl());
+            int result = conference.insert(dbConfig.getDburl());
 
             if (result > 0) {
                 model.addAttribute("msgTitre", "Conférence créée avec succès !");
