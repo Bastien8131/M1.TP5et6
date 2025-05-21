@@ -1,7 +1,6 @@
 package utcapitole.miage.tp5et6.model.gestionconf;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class Participants {
     private Long codParticipant;
@@ -157,7 +156,9 @@ public class Participants {
                 '}';
     }
 
-    public int insertDB(String url){
+    public int insert(String url){
+        if (this.checkEmail(url) == 1) return 2;
+
         try {
             Class.forName("org.sqlite.JDBC");
             java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
@@ -202,7 +203,7 @@ public class Participants {
         }
     }
 
-    public int updateDB(String url){
+    public int update(String url){
         try {
             Class.forName("org.sqlite.JDBC");
             java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
@@ -245,6 +246,26 @@ public class Participants {
             System.out.println("Erreur lors de l'update dans la table PARTICIPANTS : " + e.getMessage());
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    public int checkEmail(String url){
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            PreparedStatement checkStmt = conn.prepareStatement(
+                    "SELECT COUNT(*) FROM PARTICIPANTS WHERE emailPart = ?"
+            );
+            checkStmt.setString(1, this.getEmailPart());
+            ResultSet rs = checkStmt.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            rs.close();
+            checkStmt.close();
+            conn.close();
+
+            return count > 0 ? 1 : 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

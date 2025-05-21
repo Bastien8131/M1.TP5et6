@@ -90,53 +90,22 @@ public class ParticipantsController {
 
     @PostMapping("/insert")
     public String addParticipants(@ModelAttribute Participants participant, Model model) {
-        System.out.println(participant);
+        int rs = participant.insert(dbConfig.getDburl());
 
-        try {
-            // Vérification de l'unicité de l'email
-            Connection conn = DriverManager.getConnection(dbConfig.getDburl());
-            PreparedStatement checkStmt = conn.prepareStatement(
-                    "SELECT COUNT(*) FROM PARTICIPANTS WHERE emailPart = ?"
-            );
-            checkStmt.setString(1, participant.getEmailPart());
-            ResultSet rs = checkStmt.executeQuery();
-            rs.next();
-            int count = rs.getInt(1);
-            rs.close();
-            checkStmt.close();
-
-            if (count > 0) {
-                System.out.println("L'email de ce participant existe déjà");
-                model.addAttribute("msgTitre", "Cet email de participant existe déjà");
-                model.addAttribute("msgStatut", "erreur");
-                model.addAttribute("participant", participant);
-                conn.close();
-                return "gestionconf/message/message";
-            }
-
-            // Insertion du participant dans la base de données
-            int result = participant.insertDB(dbConfig.getDburl());
-            conn.close();
-
-            if (result > 0) {
-                model.addAttribute("msgTitre", "Compte créé avec succès !");
-                model.addAttribute("msgStatut", "ok");
-                model.addAttribute("participant", participant);
-            } else {
-                model.addAttribute("msgTitre", "Erreur lors de la création du compte");
-                model.addAttribute("msgStatut", "erreur");
-                model.addAttribute("participant", participant);
-            }
-
-            return "gestionconf/message/message";
-        } catch (Exception e) {
-            System.out.println("Erreur lors de l'insertion dans la table PARTICIPANTS : " + e.getMessage());
-            e.printStackTrace();
+        if (rs == 1) {
+            model.addAttribute("msgTitre", "Compte créé avec succès !");
+            model.addAttribute("msgStatut", "ok");
+        }
+        else if (rs == 2) {
+            model.addAttribute("msgTitre", "Cet email de participant existe déjà");
+            model.addAttribute("msgStatut", "erreur");
+        }
+        else {
             model.addAttribute("msgTitre", "Erreur lors de la création du compte");
             model.addAttribute("msgStatut", "erreur");
-            model.addAttribute("msgContenu", "Une erreur est survenue : " + e.getMessage());
-            return "gestionconf/message/message";
         }
+
+        return "gestionconf/message/message";
     }
 
     @PostMapping("/update")
@@ -144,7 +113,7 @@ public class ParticipantsController {
         System.out.println(participant);
 
         try {
-            int result = participant.updateDB(dbConfig.getDburl());
+            int result = participant.update(dbConfig.getDburl());
 
             if (result > 0) {
                 model.addAttribute("msgTitre", "Compte mis à jour avec succès !");
