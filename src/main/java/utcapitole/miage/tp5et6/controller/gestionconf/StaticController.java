@@ -8,7 +8,7 @@ public class StaticController {
 
     @RequestMapping("")
     public String index() {
-        return "redirect:/index.html";
+        return "redirect:/gestionconf";
     }
 
     @RequestMapping("/gestionconf/participants/form/insert")
