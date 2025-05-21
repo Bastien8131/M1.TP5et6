@@ -198,4 +198,67 @@ public class Conferences {
             return 0;
         }
     }
+
+    public static List<Conferences> findAll(String url){
+        List<Conferences> list = new ArrayList<>();
+        try{
+            java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM CONFERENCES");
+            java.sql.ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                long codCongres = rs.getLong("CodCongres");
+
+                list.add(new Conferences(
+                        codCongres,
+                        rs.getString("titreCongres"),
+                        rs.getInt("numEditionCongres"),
+                        rs.getString("dtDebutCongres"),
+                        rs.getString("dtFinCongres"),
+                        rs.getString("urlSiteWebCongres"),
+                        findThematiquesByCongres(conn, codCongres),
+                        findActivitesByCongres(conn, codCongres)
+                ));
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la récupération des conférences : " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    private static List<Integer> findThematiquesByCongres(java.sql.Connection conn, long codCongres) throws java.sql.SQLException {
+        List<Integer> thematiques = new ArrayList<>();
+        PreparedStatement stmtTh = conn.prepareStatement(
+                "SELECT codTh FROM CONF_THEMATIQUES WHERE codCongres = ?"
+        );
+        stmtTh.setLong(1, codCongres);
+        java.sql.ResultSet rsTh = stmtTh.executeQuery();
+        while (rsTh.next()) {
+            thematiques.add(rsTh.getInt("codTh"));
+        }
+        rsTh.close();
+        stmtTh.close();
+        return thematiques;
+    }
+
+    private static List<Integer> findActivitesByCongres(java.sql.Connection conn, long codCongres) throws java.sql.SQLException {
+        List<Integer> activites = new ArrayList<>();
+        PreparedStatement stmtAct = conn.prepareStatement(
+                "SELECT codAct FROM CONF_ACTIVITES WHERE codCongres = ?"
+        );
+        stmtAct.setLong(1, codCongres);
+        java.sql.ResultSet rsAct = stmtAct.executeQuery();
+        while (rsAct.next()) {
+            activites.add(rsAct.getInt("codAct"));
+        }
+        rsAct.close();
+        stmtAct.close();
+        return activites;
+    }
 }
