@@ -1,6 +1,7 @@
 package utcapitole.miage.tp5et6.model.gestionconf;
 
 import java.sql.*;
+import java.util.List;
 
 public class Participants {
     private Long codParticipant;
@@ -195,11 +196,11 @@ public class Participants {
             stmtP.executeUpdate();
             stmt.close();
             conn.close();
-            return 1;
+            return 0;
         } catch (Exception e) {
             System.out.println("Erreur lors de l'insertion dans la table PARTICIPANTS : " + e.getMessage());
             e.printStackTrace();
-            return 0;
+            return 1;
         }
     }
 
@@ -241,12 +242,46 @@ public class Participants {
             stmtP.executeUpdate();
             stmt.close();
             conn.close();
-            return 1;
+            return 0;
         } catch (Exception e) {
             System.out.println("Erreur lors de l'update dans la table PARTICIPANTS : " + e.getMessage());
             e.printStackTrace();
-            return 0;
+            return 1;
         }
+    }
+
+    public static List<Participants> findAll(String url){
+        List<Participants> list = new java.util.ArrayList<>();
+        try {
+            Class.forName("org.sqlite.JDBC");
+            java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
+            java.sql.Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM PARTICIPANTS");
+
+            while (rs.next()) {
+                Participants participant = new Participants(
+                        rs.getLong("codParticipant"),
+                        rs.getString("nomPart"),
+                        rs.getString("prenomPart"),
+                        rs.getString("organismePart"),
+                        rs.getInt("cpPart"),
+                        rs.getString("adrPart"),
+                        rs.getString("villePart"),
+                        rs.getString("paysPart"),
+                        rs.getString("emailPart"),
+                        rs.getString("dtInscription"),
+                        rs.getInt("statut"),
+                        rs.getString("password")
+                );
+                list.add(participant);
+            }
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la récupération des participants : " + e.getMessage());
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public int checkEmail(String url){

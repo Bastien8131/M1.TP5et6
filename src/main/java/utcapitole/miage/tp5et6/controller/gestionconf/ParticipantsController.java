@@ -92,16 +92,16 @@ public class ParticipantsController {
     public String addParticipants(@ModelAttribute Participants participant, Model model) {
         int rs = participant.insert(dbConfig.getDburl());
 
-        if (rs == 1) {
+        if (rs == 0) {
             model.addAttribute("msgTitre", "Compte créé avec succès !");
             model.addAttribute("msgStatut", "ok");
         }
-        else if (rs == 2) {
-            model.addAttribute("msgTitre", "Cet email de participant existe déjà");
+        else if (rs == 1){
+            model.addAttribute("msgTitre", "Erreur lors de la création du compte");
             model.addAttribute("msgStatut", "erreur");
         }
-        else {
-            model.addAttribute("msgTitre", "Erreur lors de la création du compte");
+        else if (rs == 2) {
+            model.addAttribute("msgTitre", "Cet email de participant existe déjà");
             model.addAttribute("msgStatut", "erreur");
         }
 
@@ -110,68 +110,25 @@ public class ParticipantsController {
 
     @PostMapping("/update")
     public String updateParticipants(@ModelAttribute Participants participant, Model model) {
-        System.out.println(participant);
+        int rs = participant.update(dbConfig.getDburl());
 
-        try {
-            int result = participant.update(dbConfig.getDburl());
-
-            if (result > 0) {
-                model.addAttribute("msgTitre", "Compte mis à jour avec succès !");
-                model.addAttribute("msgStatut", "ok");
-                model.addAttribute("participant", participant);
-            } else {
-                model.addAttribute("msgTitre", "Erreur lors de la mise à jour du compte");
-                model.addAttribute("msgStatut", "erreur");
-                model.addAttribute("participant", participant);
-            }
-
-            return "gestionconf/message/message";
-        } catch (Exception e) {
-            System.out.println("Erreur lors de la mise à jour dans la table PARTICIPANTS : " + e.getMessage());
-            e.printStackTrace();
+        if (rs == 0) {
+            model.addAttribute("msgTitre", "Compte mis à jour avec succès !");
+            model.addAttribute("msgStatut", "ok");
+            model.addAttribute("participant", participant);
+        }
+        else if (rs == 1) {
             model.addAttribute("msgTitre", "Erreur lors de la mise à jour du compte");
             model.addAttribute("msgStatut", "erreur");
-            model.addAttribute("msgContenu", "Une erreur est survenue : " + e.getMessage());
-            return "gestionconf/message/message";
+            model.addAttribute("participant", participant);
         }
+
+        return "gestionconf/message/message";
     }
 
     @GetMapping("/list")
     public String listParticipants(Model model) {
-        List<Participants> participants = new ArrayList<>();
-
-        try {
-            Connection conn = DriverManager.getConnection(dbConfig.getDburl());
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM PARTICIPANTS");
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Participants participant = new Participants(
-                        rs.getLong("codParticipant"),
-                        rs.getString("nomPart"),
-                        rs.getString("prenomPart"),
-                        rs.getString("organismePart"),
-                        rs.getInt("cpPart"),
-                        rs.getString("adrPart"),
-                        rs.getString("villePart"),
-                        rs.getString("paysPart"),
-                        rs.getString("emailPart"),
-                        rs.getString("dtInscription"),
-                        rs.getInt("statut"),
-                        rs.getString("password")
-                );
-                participants.add(participant);
-            }
-
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            System.out.println("Erreur lors de la récupération des participants : " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        model.addAttribute("participants", participants);
+        model.addAttribute("participants", Participants.findAll(dbConfig.getDburl()));
         return "gestionconf/participants/list/list";
     }
 
