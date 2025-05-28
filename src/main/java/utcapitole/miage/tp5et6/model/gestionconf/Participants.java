@@ -284,6 +284,87 @@ public class Participants {
         return list;
     }
 
+    public static Participants findById(String url, Integer id){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT * FROM PARTICIPANTS WHERE codParticipant = ?"
+            );
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Participants participant = new Participants(
+                        rs.getLong("codParticipant"),
+                        rs.getString("nomPart"),
+                        rs.getString("prenomPart"),
+                        rs.getString("organismePart"),
+                        rs.getInt("cpPart"),
+                        rs.getString("adrPart"),
+                        rs.getString("villePart"),
+                        rs.getString("paysPart"),
+                        rs.getString("emailPart"),
+                        rs.getString("dtInscription"),
+                        rs.getInt("statut"),
+                        rs.getString("password")
+                );
+                rs.close();
+                stmt.close();
+                conn.close();
+                return participant;
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la récupération du participant : " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Participants authenticate(String url, String email, String password) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection(url);
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT * FROM PARTICIPANTS WHERE emailPart = ? AND password = ?"
+            );
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Participants participant = new Participants(
+                        rs.getLong("codParticipant"),
+                        rs.getString("nomPart"),
+                        rs.getString("prenomPart"),
+                        rs.getString("organismePart"),
+                        rs.getInt("cpPart"),
+                        rs.getString("adrPart"),
+                        rs.getString("villePart"),
+                        rs.getString("paysPart"),
+                        rs.getString("emailPart"),
+                        rs.getString("dtInscription"),
+                        rs.getInt("statut"),
+                        rs.getString("password")
+                );
+                rs.close();
+                stmt.close();
+                conn.close();
+                return participant;
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'authentification : " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public int checkEmail(String url){
         try{
             Connection conn = DriverManager.getConnection(url);
@@ -304,5 +385,3 @@ public class Participants {
         }
     }
 }
-
-

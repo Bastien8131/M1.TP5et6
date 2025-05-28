@@ -11,6 +11,7 @@ import utcapitole.miage.tp5et6.model.gestionconf.Activites;
 import utcapitole.miage.tp5et6.model.gestionconf.Conferences;
 import utcapitole.miage.tp5et6.model.gestionconf.Thematiques;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,13 +43,20 @@ public class ConferenceController {
             @RequestParam String dtDebutCongres,
             @RequestParam String dtFinCongres,
             @RequestParam String urlSiteWebCongres,
-            @RequestParam List<Integer> activites,
-            @RequestParam List<Integer> thematiques,
+            @RequestParam(required = false) List<Integer> activites,
+            @RequestParam(required = false) List<Integer> thematiques,
             Model model
     ) {
+        if (activites == null) {
+            activites = new ArrayList<>();
+        }
+        if (thematiques == null) {
+            thematiques = new ArrayList<>();
+        }
+
         try {
             Conferences conference = new Conferences(
-                    64L, // REF ;)
+                    null,
                     titreCongres,
                     numEditionCongres,
                     dtDebutCongres,

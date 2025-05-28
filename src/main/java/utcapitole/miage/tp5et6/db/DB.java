@@ -1,10 +1,7 @@
 package utcapitole.miage.tp5et6.db;
 
-import utcapitole.miage.tp5et6.model.gestionconf.Participants;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
 
 public class DB {
 
@@ -64,16 +61,6 @@ public class DB {
                             ")"
             );
             stmt.execute(utcapitole.miage.tp5et6.model.gestionconf.Participants.CREATE_TABLE_SQL);
-//            stmt.execute(
-//                    "CREATE TABLE IF NOT EXISTS INSCRIPTIONS (" +
-//                            "codCongres INTEGER, " +
-//                            "codParticipant INTEGER, " +
-//                            "dateInscription TEXT, " +
-//                            "PRIMARY KEY (codCongres, codParticipant), " +
-//                            "FOREIGN KEY (codCongres) REFERENCES CONFERENCES(CodCongres), " +
-//                            "FOREIGN KEY (codParticipant) REFERENCES PARTICIPANTS(codParticipant)" +
-//                            ")"
-//            );
 
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS STATUS (" +
@@ -97,7 +84,6 @@ public class DB {
                             ")"
             );
 
-            // Add junction table for CONFERENCES and THEMATIQUES
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS CONF_THEMATIQUES (" +
                             "codCongres INTEGER, " +
@@ -108,7 +94,6 @@ public class DB {
                             ")"
             );
 
-            // Add junction table for CONFERENCES and ACTIVITES
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS CONF_ACTIVITES (" +
                             "codCongres INTEGER, " +
@@ -135,17 +120,14 @@ public class DB {
             java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
             java.sql.Statement stmt = conn.createStatement();
 
-            //Req pour creal les DB
             stmt.execute("DELETE FROM STATUS");
             stmt.execute("DELETE FROM ACTIVITES");
             stmt.execute("DELETE FROM THEMATIQUES");
 
-            //Req pour saisir les donnée de Status
             stmt.execute("INSERT INTO STATUS (codStatus, nomStatus) VALUES (1, 'Etudiant')");
             stmt.execute("INSERT INTO STATUS (codStatus, nomStatus) VALUES (2, 'Universitaire')");
             stmt.execute("INSERT INTO STATUS (codStatus, nomStatus) VALUES (3, 'Entreprise')");
 
-            //Req pour saisir les donnée de ACTIVITES
             stmt.execute(
                     "INSERT INTO ACTIVITES (codAct, nomAct, prixAct) " +
                             "VALUES (1, 'Visite guidée de la ville', 50)"
@@ -159,29 +141,26 @@ public class DB {
                             "VALUES (3, 'repas rencontre', 70)"
             );
 
-            //Req pour saisir les donnée de THEMATIQUES
             PreparedStatement stmtTh = conn.prepareStatement(
                     "INSERT INTO THEMATIQUES (codTh, nomTh) VALUES (?, ?)"
             );
 
             String[] thList = {
-                "Comptabilité-Contrôle",
-                "Ressources Humaines",
-                "Marketing","Finance",
-                "Gestion des SI",
-                "Gestion de projets informatiques",
-                "Business Intelligence",
-                "Informatique Décisionnelle",
-                "Veille Stratégique"
+                    "Comptabilité-Contrôle",
+                    "Ressources Humaines",
+                    "Marketing","Finance",
+                    "Gestion des SI",
+                    "Gestion de projets informatiques",
+                    "Business Intelligence",
+                    "Informatique Décisionnelle",
+                    "Veille Stratégique"
             };
-
 
             for (int i = 0; i < thList.length; i++) {
                 stmtTh.setInt(1, i);
                 stmtTh.setString(2, thList[i]);
                 stmtTh.executeUpdate();
             }
-
 
             stmt.close();
             conn.close();
@@ -199,11 +178,11 @@ public class DB {
             java.sql.Statement stmt = conn.createStatement();
 
             String[] queries = {
-                "SELECT * FROM ACTIVITES",
-                "SELECT * FROM THEMATIQUES",
-                "SELECT * FROM PARTICIPANTS",
-                "SELECT * FROM CONFERENCES",
-                "SELECT * FROM STATUS"
+                    "SELECT * FROM ACTIVITES",
+                    "SELECT * FROM THEMATIQUES",
+                    "SELECT * FROM PARTICIPANTS",
+                    "SELECT * FROM CONFERENCES",
+                    "SELECT * FROM STATUS"
             };
 
             for (String query : queries) {
@@ -223,46 +202,6 @@ public class DB {
         } catch (Exception e) {
             System.out.println("Erreur lors de l'initialisation des tables : " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    public static Participants getPartFromDB(String url, Integer id){
-        Participants p = null;
-        try {
-            Class.forName("org.sqlite.JDBC");
-            java.sql.Connection conn = java.sql.DriverManager.getConnection(url);
-            java.sql.Statement stmt = conn.createStatement();
-
-            PreparedStatement stmtP = conn.prepareStatement(
-                    "SELECT * FROM PARTICIPANTS WHERE codParticipant = ?"
-            );
-
-            stmtP.setString(1, String.valueOf(id));
-            ResultSet rs = stmtP.executeQuery();
-            rs.next();
-
-            p = new Participants(
-                    rs.getLong("codParticipant"),
-                    rs.getString("nomPart"),
-                    rs.getString("prenomPart"),
-                    rs.getString("organismePart"),
-                    rs.getInt("cpPart"),
-                    rs.getString("adrPart"),
-                    rs.getString("villePart"),
-                    rs.getString("paysPart"),
-                    rs.getString("emailPart"),
-                    rs.getString("dtInscription"),
-                    rs.getInt("statut"),
-                    rs.getString("password")
-            );
-
-            stmt.close();
-            conn.close();
-            return p;
-        } catch (Exception e) {
-            System.out.println("Erreur lors de l'update dans la table PARTICIPANTS : " + e.getMessage());
-            e.printStackTrace();
-            return p;
         }
     }
 }
